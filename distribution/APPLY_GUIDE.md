@@ -1,15 +1,15 @@
 # Apply guide: server-side mute + cut (patched Jellyfin + CorrMedia)
 
-This is not a replacement Jellyfin. Use this when you want to patch **official Jellyfin 12.1** with the CorrMedia overlay and run the CorrMedia plugin so sidecar `.corr.json` edits (mute, picture treatments, skip/cut) apply on the primary library item.
+This is not a replacement Jellyfin. Use this when you want to patch **official Jellyfin 12.2** with the CorrMedia overlay and run the CorrMedia plugin so sidecar `.corr.json` edits (mute, picture treatments, skip/cut) apply on the primary library item.
 
-The overlay is modified Jellyfin 12.1 source and is licensed under GPL-2 only, the same license as Jellyfin. See the repo [`LICENSE`](../LICENSE).
+The overlay is modified Jellyfin 12.2 source and is licensed under GPL-2 only, the same license as Jellyfin. See the repo [`LICENSE`](../LICENSE).
 
 **Before you install:** backup your Jellyfin config directory (and keep a path back to stock) before applying the overlay. There is no installer or built-in upgrade path — this is a manual rebuild and plugin copy. Needs more testing; it has not been tried on every OS, client, or hardware path.
 
 ## Prerequisites
 
 - .NET 10 SDK
-- A clone of [Jellyfin server](https://github.com/jellyfin/jellyfin) at **v12.1**, **or** this repo’s `jellyfin-source` (same tag)
+- A clone of [Jellyfin server](https://github.com/jellyfin/jellyfin) at **v12.2**, **or** this repo’s `jellyfin-source` (same tag)
 - This repo with `distribution/jellyfin-core-overlay` and `scripts/`
 
 ## Steps

@@ -16,9 +16,9 @@
   </PropertyGroup>
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Jellyfin.Controller" Version="12.1.0" Condition="!Exists('..\jellyfin-source\MediaBrowser.Controller\MediaBrowser.Controller.csproj')" />
+    <PackageReference Include="Jellyfin.Controller" Version="12.2.0" Condition="!Exists('..\jellyfin-source\MediaBrowser.Controller\MediaBrowser.Controller.csproj')" />
     <ProjectReference Include="..\jellyfin-source\MediaBrowser.Controller\MediaBrowser.Controller.csproj" Condition="Exists('..\jellyfin-source\MediaBrowser.Controller\MediaBrowser.Controller.csproj')" />
-    <PackageReference Include="Jellyfin.Model" Version="12.1.0" Condition="!Exists('..\jellyfin-source\MediaBrowser.Controller\MediaBrowser.Controller.csproj')" />
+    <PackageReference Include="Jellyfin.Model" Version="12.2.0" Condition="!Exists('..\jellyfin-source\MediaBrowser.Controller\MediaBrowser.Controller.csproj')" />
   </ItemGroup>
 
   <ItemGroup>

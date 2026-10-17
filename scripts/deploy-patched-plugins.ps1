@@ -3,7 +3,7 @@
 .SYNOPSIS
     Builds CorrMedia (with patched core ref when available) and copies it into a Jellyfin plugins folder.
 .DESCRIPTION
-    Builds CorrMedia from this repo against Jellyfin 12.1 (net10.0). When jellyfin-source exists, the plugin is built against the patched core.
+    Builds CorrMedia from this repo against Jellyfin 12.2 (net10.0). When jellyfin-source exists, the plugin is built against the patched core.
     Deploys CorrMedia only.
 .PARAMETER TargetPluginsPath
     Directory where Jellyfin looks for plugins.

@@ -4,7 +4,7 @@ A Jellyfin **plugin** that applies sidecar **mute**, **volume**, **beep**, **zoo
 
 ## What this repository is
 
-This repo is CorrMedia: the plugin, the sidecar schema, and a **small core overlay** (encode hooks) you apply to Jellyfin 12.1 so mute/cut/picture edits can run on the primary item. The GitHub name `CorrMedia/jellyfin-plugin-corrmedia` is the plugin catalog (root `manifest.json` and release zips). You still run Jellyfin.
+This repo is CorrMedia: the plugin, the sidecar schema, and a **small core overlay** (encode hooks) you apply to Jellyfin 12.2 so mute/cut/picture edits can run on the primary item. The GitHub name `CorrMedia/jellyfin-plugin-corrmedia` is the plugin catalog (root `manifest.json` and release zips). You still run Jellyfin.
 
 It is **not**:
 
@@ -188,7 +188,7 @@ Site: [corrmedia.github.io](https://corrmedia.github.io) ([source](https://githu
 
 ## Compatibility
 
-* Targeted at Jellyfin 12.1 (plugin ABI `12.1.0.0`, .NET 10) / patched 12.1 overlay
+* Targeted at Jellyfin 12.2 (plugin ABI `12.2.0.0`, .NET 10) / patched 12.2 overlay
 * Listing play, Continue Watching, and typical web/mobile/TV clients use the primary item; coverage is incomplete
 
 ## Known Limitations
@@ -211,6 +211,10 @@ See [`ROADMAP.md`](ROADMAP.md): server mute → effects-then-cut → apply-edits
 PRs welcome. Prefer work aligned with the roadmap (server-side delivery over new client playback commands).
 
 ## Changelog
+
+### v1.4.0.0
+- Targets Jellyfin 12.2 (`net10.0`, plugin ABI `12.2.0.0`) and the matching core overlay
+- Overlay rebased onto v12.2: Dolby Vision profile 8 uses `hvc1`, HLS segment downloads are reported, graphical subtitles are served with range support, progressive audio keeps the stereo downmix filter, and low-bitrate 10-bit sources get bit-depth compensation
 
 ### v1.3.0.0
 - Optional `edits[].language` applies a sidecar edit only when the selected audio track is that language. Untagged edits still apply on every track.
@@ -236,7 +240,7 @@ PRs welcome. Prefer work aligned with the roadmap (server-side delivery over new
 
 CorrMedia is licensed under the GNU General Public License version 2 only. See [`LICENSE`](LICENSE).
 
-The core overlay in [`distribution/jellyfin-core-overlay`](distribution/jellyfin-core-overlay) is modified Jellyfin 12.1 source and stays under that same license. The plugin is GPL-2 as well, because it loads inside that patched server.
+The core overlay in [`distribution/jellyfin-core-overlay`](distribution/jellyfin-core-overlay) is modified Jellyfin 12.2 source and stays under that same license. The plugin is GPL-2 as well, because it loads inside that patched server.
 
 ## Copyright
 
