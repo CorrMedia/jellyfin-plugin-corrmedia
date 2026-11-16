@@ -3,7 +3,7 @@
 .SYNOPSIS
     Builds CorrMedia (with patched core ref when available) and copies it into a Jellyfin plugins folder.
 .DESCRIPTION
-    Builds CorrMedia from this repo against Jellyfin 12.2 (net10.0). When jellyfin-source exists, the plugin is built against the patched core.
+    Builds CorrMedia from this repo against Jellyfin 12.4 (net10.0). When jellyfin-source exists, the plugin is built against the patched core.
     Deploys CorrMedia only.
 .PARAMETER TargetPluginsPath
     Directory where Jellyfin looks for plugins.
@@ -40,5 +40,6 @@ New-Item -ItemType Directory -Force -Path $pluginTargetDir | Out-Null
 Copy-Item -Force $pluginDll $pluginTargetDir
 Copy-Item -Force (Join-Path $RepoRoot 'Jellyfin.Plugin.CorrMedia\manifest.json') $pluginTargetDir
 Copy-Item -Force (Join-Path $RepoRoot 'Jellyfin.Plugin.CorrMedia\manifest.json') (Join-Path $pluginTargetDir 'meta.json')
+Copy-Item -Force (Join-Path $RepoRoot 'images\jellyfin-plugin-corrmedia.png') $pluginTargetDir
 
 Write-Host "CorrMedia deployed to $TargetPluginsPath."

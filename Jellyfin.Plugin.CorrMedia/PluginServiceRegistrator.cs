@@ -17,6 +17,9 @@ namespace Jellyfin.Plugin.CorrMedia
             serviceCollection.AddSingleton<EditOverrideStore>();
             serviceCollection.AddSingleton<PlaybackAudioLanguage>();
             serviceCollection.AddHostedService<CorrSessionCleanup>();
+            serviceCollection.AddSingleton<CorrSidecarIndex>();
+            serviceCollection.AddSingleton<Microsoft.Extensions.Hosting.IHostedService>(
+                sp => sp.GetRequiredService<CorrSidecarIndex>());
 
 #if PATCHED_CORE
             serviceCollection.AddSingleton<MediaBrowser.Controller.MediaEncoding.ISessionAudioFilterProvider, SessionAudioFilterProvider>();
@@ -26,6 +29,8 @@ namespace Jellyfin.Plugin.CorrMedia
             serviceCollection.AddSingleton<MediaBrowser.Controller.MediaEncoding.ISessionSubtitleCueRewriter, SessionSubtitleCueRewriter>();
             serviceCollection.AddSingleton<MediaBrowser.Controller.MediaEncoding.ISessionTrickplayRewriter, SessionTrickplayRewriter>();
             serviceCollection.AddSingleton<MediaBrowser.Controller.MediaEncoding.ISessionChapterRewriter, SessionChapterRewriter>();
+            serviceCollection.AddSingleton<MediaBrowser.Controller.Library.ICorrSidecarAvailability>(
+                sp => sp.GetRequiredService<CorrSidecarIndex>());
 #endif
         }
     }

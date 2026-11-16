@@ -1,16 +1,17 @@
 # Apply guide: server-side mute + cut (patched Jellyfin + CorrMedia)
 
-This is not a replacement Jellyfin. Use this when you want to patch **official Jellyfin 12.2** with the CorrMedia overlay and run the CorrMedia plugin so sidecar `.corr.json` edits (mute, picture treatments, skip/cut) apply on the primary library item.
+This is not a replacement Jellyfin. Use this when you want to patch **official Jellyfin 12.4** with the CorrMedia overlay and run the CorrMedia plugin so sidecar `.corr.json` edits (mute, picture treatments, skip/cut) apply on the primary library item.
 
-The overlay is modified Jellyfin 12.2 source and is licensed under GPL-2 only, the same license as Jellyfin. See the repo [`LICENSE`](../LICENSE).
+The overlay is modified Jellyfin 12.4 source and is licensed under GPL-2 only, the same license as Jellyfin. See the repo [`LICENSE`](../LICENSE).
 
 **Before you install:** backup your Jellyfin config directory (and keep a path back to stock) before applying the overlay. There is no installer or built-in upgrade path — this is a manual rebuild and plugin copy. Needs more testing; it has not been tried on every OS, client, or hardware path.
 
 ## Prerequisites
 
 - .NET 10 SDK
-- A clone of [Jellyfin server](https://github.com/jellyfin/jellyfin) at **v12.2**, **or** this repo’s `jellyfin-source` (same tag)
-- This repo with `distribution/jellyfin-core-overlay` and `scripts/`
+- A clone of [Jellyfin server](https://github.com/jellyfin/jellyfin) on **release-12.z** (12.4), **or** this repo’s `jellyfin-source` (that branch)
+- A clone of [jellyfin-web](https://github.com/jellyfin/jellyfin-web) on **release-12.z** (12.4), plus Node.js 24, if non-admin users should open their own filters
+- This repo with `distribution/jellyfin-core-overlay`, `distribution/jellyfin-web-overlay`, and `scripts/`
 
 ## Steps
 
@@ -22,7 +23,7 @@ From this repo root:
 .\scripts\apply-core-overlay.ps1 -JellyfinSourcePath C:\path\to\jellyfin
 ```
 
-You should see copies for `ISessionAudioFilterProvider`, `ISessionMediaEditGraphProvider`, `ISessionMuteRangeLoader`, `ISessionCorrDeliveryHint`, `ISessionSubtitleCueRewriter`, `ISessionTrickplayRewriter`, `ITrickplayCellCropper`, `SessionEditGraphHwBridge`, `EncodingHelper`, `DynamicHlsController`, `VideosController`, `SubtitleController`, `TrickplayController`, `MediaInfoHelper`, `DtoService`, `MediaSourceManager`, `ApplicationHost`, `CoreAppHost`, and `PackageController`.
+You should see copies for `ISessionAudioFilterProvider`, `ISessionMediaEditGraphProvider`, `ISessionMuteRangeLoader`, `ISessionCorrDeliveryHint`, `ICorrSidecarAvailability`, `ISessionSubtitleCueRewriter`, `ISessionTrickplayRewriter`, `ITrickplayCellCropper`, `SessionEditGraphHwBridge`, `EncodingHelper`, `DynamicHlsController`, `VideosController`, `SubtitleController`, `TrickplayController`, `MediaInfoHelper`, `DtoService`, `BaseItemDto`, `MediaSourceManager`, `ApplicationHost`, `CoreAppHost`, and `PackageController`.
 
 ### 2. Build Jellyfin
 
@@ -40,12 +41,23 @@ Plugins build against patched core when `jellyfin-source` exists in this repo.
 
 ### 4. Run Jellyfin
 
-Enable CorrMedia. Place `{stem}.corr.json` next to media. Times are on the original source timeline; non-length-altering edits are applied before skip/cut. Output frame size never changes. Each user can turn sidecar treatments on or off by category from the CorrMedia dashboard (the sidecar still chooses mute vs beep vs crop vs skip). Restart playback after changing.
+Enable CorrMedia. Place `{stem}.corr.json` next to media. Times are on the original source timeline; non-length-altering edits are applied before skip/cut. Output frame size never changes. Each user can turn sidecar treatments on or off by category (the sidecar still chooses mute vs beep vs crop vs skip). Restart playback after changing.
+
+### User filter menu
+
+The dashboard plugin page is administrator-only, and saving it changes the signed-in admin’s filters. Non-admin users get the same form from the patched web client: user menu → **CorrMedia**, or **Settings** → **CorrMedia**.
+
+```powershell
+.\scripts\apply-web-overlay.ps1 -JellyfinWebPath C:\path\to\jellyfin-web
+```
+
+From that checkout, `npm run build:production`, then start Jellyfin with `--webdir` pointed at the resulting `dist` folder (the VS Code launch config already uses `../jellyfin-web/dist`). A stock web client has no CorrMedia entry.
 
 ## Validation
 
 - PlaybackInfo for an item with `.corr.json` (apply-edits on) should list the normal source named `{Title} (Edited)`, DirectPlay off.
-- Library cards and item details should show `{Title} (Edited)` for that user.
+- Library cards and item details should show `{Title} (Edited)` for that user while apply-edits is on.
+- Library cards and lists should show an **Edits** badge when `{stem}.corr.json` exists, including when apply-edits is off. Series and season cards show it when any episode has a sidecar. Item JSON includes `HasCorrSidecar: true`.
 - Play from the listing: mute, zoom/blur, and/or effects-then-cut; cuts force HLS.
 - Mute-only: logs show `SessionAudioFilterProvider` and FFmpeg `volume=...eval=frame`.
 - Zoom/blur (no skips): logs show `SessionMediaEditGraphProvider` / `filter_complex` with overlay.

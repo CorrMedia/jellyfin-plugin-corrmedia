@@ -4,7 +4,7 @@ A Jellyfin **plugin** that applies sidecar **mute**, **volume**, **beep**, **zoo
 
 ## What this repository is
 
-This repo is CorrMedia: the plugin, the sidecar schema, and a **small core overlay** (encode hooks) you apply to Jellyfin 12.2 so mute/cut/picture edits can run on the primary item. The GitHub name `CorrMedia/jellyfin-plugin-corrmedia` is the plugin catalog (root `manifest.json` and release zips). You still run Jellyfin.
+This repo is CorrMedia: the plugin, the sidecar schema, and a **small core overlay** (encode hooks) you apply to Jellyfin 12.4 so mute/cut/picture edits can run on the primary item. The GitHub name `CorrMedia/jellyfin-plugin-corrmedia` is the plugin catalog (root `manifest.json` and release zips). You still run Jellyfin.
 
 It is **not**:
 
@@ -17,6 +17,7 @@ On stock Jellyfin the plugin loads, but sidecar edits are not applied until the 
 ## Features
 
 - **Sidecar playback** — When a `.corr.json` exists and **Apply sidecar edits** is on, every play of that title (listing, Continue Watching, apps) gets the edited stream. Titles show `{Name} (Edited)`. Turn the toggle off to play the file untouched.
+- **Listing badge** — Patched web shows **Edits** on a movie, episode, or other video when `{stem}.corr.json` is next to the file. A series or season shows it when any episode has a sidecar. The badge is availability: it stays up when Apply sidecar edits is off. `{Name} (Edited)` still means this user is playing the edited stream.
 - **Skip segments** — Server-side cut (omit from encode) on **patched Jellyfin**; no client Seek
 - **Mute / volume / beep** — Server-side FFmpeg audio (`-af` when all-channel audio-only; inside the edit graph when selective channels, video effects, or skips exist). Optional `channels` names apply before any stereo downmix.
 - **Zoom / punch-in** — Timed crop+scale that fills the frame (does not change duration or output size)
@@ -175,20 +176,22 @@ Site: [corrmedia.github.io](https://corrmedia.github.io) ([source](https://githu
 1. Download [CorrMedia.zip](https://github.com/CorrMedia/jellyfin-plugin-corrmedia/releases/latest) or build this repository
 2. Extract the zip into your Jellyfin `plugins` folder (so `Jellyfin.Plugin.CorrMedia.dll` sits in a plugin directory)
 3. Restart Jellyfin
-4. Configure the plugin in the Jellyfin dashboard
+4. Configure filters from the user menu → **CorrMedia** (patched web client), or from the dashboard plugin page for the signed-in admin
 5. Place `{stem}.corr.json` next to each video
 
 **Server-side mute + cut (transcoding):** Requires a Jellyfin server built with the core overlay. See [`distribution/APPLY_GUIDE.md`](distribution/APPLY_GUIDE.md). Edit plans are loaded in-process before the stream starts.
 
 ## Configuration
 
-- **Apply sidecar edits when a .corr.json file exists** — Default **on**, per user. Every client plays the edited stream; titles show `{Title} (Edited)`. Turn off to play the untouched file. Restart playback after saving.
+Open **CorrMedia** from the user menu, or from **Settings**. That page saves the signed-in user’s filters. The dashboard plugin page is the same form for an administrator’s own account. The menu entry needs the jellyfin-web overlay in [`distribution/APPLY_GUIDE.md`](distribution/APPLY_GUIDE.md). Restart playback after saving.
+
+- **Apply sidecar edits when a .corr.json file exists** — Default **on**, per user. Every client plays the edited stream; titles show `{Title} (Edited)`. Turn off to play the untouched file. The **Edits** badge on listings stays either way. Restart playback after saving.
 - **Show "Edited" on screen only on sidecar-edited titles** — Default **on**, per user. Burns a corner badge onto the first few seconds when that title is playing with sidecar edits (cuts / picture edits / selective mute). Untouched files never show it. Mid-title seek and resume omit it. Restart playback after saving.
 - **Apply every treatment in the .corr.json sidecar** — Default **on**. Every sidecar edit runs as written. Turn it off to choose categories. A camera or speaker with no strike means that class plays original; a struck icon means apply the sidecar’s treatment (mute, beep, crop, skip, etc.). These controls do not change how a treatment is done. Sidecar ids are listed in [`schema/categories.md`](schema/categories.md).
 
 ## Compatibility
 
-* Targeted at Jellyfin 12.2 (plugin ABI `12.2.0.0`, .NET 10) / patched 12.2 overlay
+* Targeted at Jellyfin 12.4 (plugin ABI `12.4.0.0`, .NET 10) / patched 12.4 overlay
 * Listing play, Continue Watching, and typical web/mobile/TV clients use the primary item; coverage is incomplete
 
 ## Known Limitations
@@ -211,6 +214,11 @@ See [`ROADMAP.md`](ROADMAP.md): server mute → effects-then-cut → apply-edits
 PRs welcome. Prefer work aligned with the roadmap (server-side delivery over new client playback commands).
 
 ## Changelog
+
+### v1.5.0.0
+- Targets Jellyfin 12.4 (`net10.0`, plugin ABI `12.4.0.0`) and the matching core overlay
+- Overlay rebased onto the 12.4 stable line (`release-12.z`). The patched files match v12.4 except `EncodingHelper`, which keeps the later HLS remux audio preroll fix (`-noaccurate_seek`)
+- Library badges read `HasCorrSidecar` from the sidecar index, including series and seasons that contain an edited episode
 
 ### v1.4.0.0
 - Targets Jellyfin 12.2 (`net10.0`, plugin ABI `12.2.0.0`) and the matching core overlay
@@ -240,7 +248,7 @@ PRs welcome. Prefer work aligned with the roadmap (server-side delivery over new
 
 CorrMedia is licensed under the GNU General Public License version 2 only. See [`LICENSE`](LICENSE).
 
-The core overlay in [`distribution/jellyfin-core-overlay`](distribution/jellyfin-core-overlay) is modified Jellyfin 12.2 source and stays under that same license. The plugin is GPL-2 as well, because it loads inside that patched server.
+The core overlay in [`distribution/jellyfin-core-overlay`](distribution/jellyfin-core-overlay) is modified Jellyfin 12.4 source and stays under that same license. The plugin is GPL-2 as well, because it loads inside that patched server.
 
 ## Copyright
 

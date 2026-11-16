@@ -6,7 +6,8 @@ namespace Jellyfin.Plugin.CorrMedia.Models;
 
 /// <summary>
 /// Fixed filter taxonomy. Sidecar <c>categories</c> map onto these ids.
-/// Language groups drill down to specific words; other groups stop at the subcategory.
+/// Language groups drill down to specific words, except crude anatomy and vulgar expression, which are one leaf each.
+/// Other groups stop at the subcategory.
 /// </summary>
 public static class EditCategoryCatalog
 {
@@ -26,6 +27,8 @@ public static class EditCategoryCatalog
             EditCategoryChannel.Hear,
             [
                 new("profanity", "Profanity", Children: ProfanityWords()),
+                new("crude_anatomy", "Crude Anatomy"),
+                new("vulgar_expression", "Vulgar Expression"),
                 new("blasphemy", "Blasphemy", Children: BlasphemyWords()),
                 new("racial_slurs", "Racial & Bigoted Slurs", Children: RacialSlurWords()),
                 new("childish_language", "Childish Language", Children: ChildishWords()),
@@ -43,7 +46,8 @@ public static class EditCategoryCatalog
                 new("implied_sex", "Implied Sex"),
                 new("sexually_suggestive", "Sexually Suggestive"),
                 new("sexual_reference", "Sexual Reference", EditCategoryChannel.Hear, "Language", SexualReferenceWords()),
-                new("vulgar_gestures", "Vulgar Gestures")
+                new("vulgar_gestures", "Vulgar Gestures"),
+                new("vulgar_humor", "Vulgar Humor")
             ]),
         new(
             "nudity_immodesty",
@@ -228,8 +232,13 @@ public static class EditCategoryCatalog
             "kiss" or "kissing" => ["kissing_heterosexual_normal"],
             "drugs" or "alcohol" => ["drugs_illegal"],
             "credits" => ["opening_credits"],
+            "ass_hole" or "arsehole" => ["word_asshole"],
             "f_word" or "fword" or "fuck" => ["word_fuck"],
             "n_word" or "nword" => ["word_n_word"],
+            "balls" or "ball_sack" or "ballsack" or "word_balls" or "word_ball_sack" => ["crude_anatomy"],
+            "tits" or "tit" or "word_tits" => ["crude_anatomy"],
+            "orgasm" or "orgasmic" or "word_orgasm" => ["crude_anatomy"],
+            "lord" => ["word_lord_derogatory"],
             "test" => [OtherId],
             _ => [OtherId]
         };
@@ -321,6 +330,7 @@ public static class EditCategoryCatalog
     [
         W("arse", "*rse"),
         W("ass", "*ss"),
+        W("asshole", "*ssh*le"),
         W("bastard", "b*st*rd"),
         W("bitch", "b*tch"),
         W("bloody", "bl**dy"),
@@ -332,6 +342,7 @@ public static class EditCategoryCatalog
         W("fu", "F.U."),
         W("goddamn", "g*dd*mn"),
         W("hell", "h*ll"),
+        W("jackass", "j*ck*ss"),
         W("piss", "p*ss"),
         W("prick", "pr*ck"),
         W("screw", "scr*w"),
@@ -342,6 +353,7 @@ public static class EditCategoryCatalog
     [
         W("goddamn", "g*dd*mn"),
         W("god_derogatory", "God (derogatory)"),
+        W("lord_derogatory", "Lord (derogatory)"),
         W("jesus_derogatory", "Jesus (derogatory)"),
         W("christ_derogatory", "Christ (derogatory)")
     ];
@@ -368,6 +380,7 @@ public static class EditCategoryCatalog
         W("geez", "geez"),
         W("gosh", "gosh"),
         W("idiot", "idiot"),
+        W("moron", "moron"),
         W("omg", "OMG"),
         W("poop", "poop"),
         W("shut_up", "shut up"),

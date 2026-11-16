@@ -129,6 +129,7 @@ namespace Emby.Server.Implementations.Dto
         private readonly ITrickplayManager _trickplayManager;
         private readonly IChapterManager _chapterManager;
         private readonly IEnumerable<ISessionCorrDeliveryHint> _corrDeliveryHints;
+        private readonly IEnumerable<ICorrSidecarAvailability> _corrSidecarAvailability;
         private readonly ISessionTrickplayRewriter _trickplayRewriter;
         private readonly ISessionChapterRewriter _chapterRewriter;
 
@@ -146,7 +147,8 @@ namespace Emby.Server.Implementations.Dto
             IChapterManager chapterManager,
             IEnumerable<ISessionCorrDeliveryHint>? corrDeliveryHints = null,
             ISessionTrickplayRewriter? trickplayRewriter = null,
-            ISessionChapterRewriter? chapterRewriter = null)
+            ISessionChapterRewriter? chapterRewriter = null,
+            IEnumerable<ICorrSidecarAvailability>? corrSidecarAvailability = null)
         {
             _logger = logger;
             _libraryManager = libraryManager;
@@ -160,6 +162,7 @@ namespace Emby.Server.Implementations.Dto
             _trickplayManager = trickplayManager;
             _chapterManager = chapterManager;
             _corrDeliveryHints = corrDeliveryHints ?? Array.Empty<ISessionCorrDeliveryHint>();
+            _corrSidecarAvailability = corrSidecarAvailability ?? Array.Empty<ICorrSidecarAvailability>();
             _trickplayRewriter = trickplayRewriter ?? new NoOpSessionTrickplayRewriter();
             _chapterRewriter = chapterRewriter ?? new NoOpSessionChapterRewriter();
         }
@@ -478,9 +481,18 @@ namespace Emby.Server.Implementations.Dto
                 dto.HasLyrics = audio.GetMediaStreams().Any(s => s.Type == MediaStreamType.Lyric);
             }
 
+            ApplyCorrSidecarAvailability(dto, item);
             ApplyCorrMediaPresentation(dto, item);
 
             return dto;
+        }
+
+        private void ApplyCorrSidecarAvailability(BaseItemDto dto, BaseItem item)
+        {
+            if (_corrSidecarAvailability.Any(availability => availability.HasSidecar(item)))
+            {
+                dto.HasCorrSidecar = true;
+            }
         }
 
         private void ApplyCorrMediaPresentation(BaseItemDto dto, BaseItem item)

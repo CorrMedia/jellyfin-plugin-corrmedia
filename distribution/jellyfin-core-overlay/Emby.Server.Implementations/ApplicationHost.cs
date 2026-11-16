@@ -568,6 +568,7 @@ namespace Emby.Server.Implementations
             serviceCollection.AddSingleton<ISessionAudioFilterProvider, NoOpSessionAudioFilterProvider>();
             serviceCollection.AddSingleton<ISessionMediaEditGraphProvider, NoOpSessionMediaEditGraphProvider>();
             serviceCollection.AddSingleton<ISessionCorrDeliveryHint, NoOpSessionCorrDeliveryHint>();
+            serviceCollection.AddSingleton<ICorrSidecarAvailability, NoOpCorrSidecarAvailability>();
             serviceCollection.AddSingleton<ISessionSubtitleCueRewriter, NoOpSessionSubtitleCueRewriter>();
             serviceCollection.AddSingleton<ISessionTrickplayRewriter, NoOpSessionTrickplayRewriter>();
             serviceCollection.AddSingleton<ISessionChapterRewriter, NoOpSessionChapterRewriter>();

@@ -1,8 +1,8 @@
-Server-side mute + cut: Jellyfin core overlay (12.2)
+Server-side mute + cut: Jellyfin core overlay (12.4)
 =============================================
 
 License: GNU General Public License version 2 only (GPL-2.0-only), the same license as Jellyfin.
-These files are modified Jellyfin 12.2 source. The full text is ../../LICENSE.
+These files are modified Jellyfin 12.4 source. The full text is ../../LICENSE.
 
 Adds:
 - ISessionAudioFilterProvider — mute-only -af injection

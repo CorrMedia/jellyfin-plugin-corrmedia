@@ -25,4 +25,5 @@ services:
       - ./test2.corr.json:/media/test2.corr.json
       - ./test2.mkv:/media/test2.mkv
       - ./docker/jellyfin/plugins:/config/plugins
+      - ../jellyfin-web/dist:/jellyfin/jellyfin-web:ro
       - .:/workspace

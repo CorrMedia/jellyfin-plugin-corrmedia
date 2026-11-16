@@ -20,14 +20,29 @@ namespace Jellyfin.Plugin.CorrMedia.Api;
 public sealed class CorrMediaController : ControllerBase
 {
     private readonly EditOverrideStore _editOverrideStore;
+    private readonly CorrSidecarIndex _sidecarIndex;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="CorrMediaController"/> class.
     /// </summary>
     /// <param name="editOverrideStore">Override store.</param>
-    public CorrMediaController(EditOverrideStore editOverrideStore)
+    /// <param name="sidecarIndex">Sidecar availability index.</param>
+    public CorrMediaController(EditOverrideStore editOverrideStore, CorrSidecarIndex sidecarIndex)
     {
         _editOverrideStore = editOverrideStore ?? throw new ArgumentNullException(nameof(editOverrideStore));
+        _sidecarIndex = sidecarIndex ?? throw new ArgumentNullException(nameof(sidecarIndex));
+    }
+
+    /// <summary>
+    /// Gets the library item ids that have a corr.json sidecar.
+    /// Series and season ids are included when any episode has one.
+    /// </summary>
+    /// <returns>Item ids.</returns>
+    [HttpGet("Sidecars")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public ActionResult<CorrSidecarIdsDto> GetSidecars()
+    {
+        return Ok(new CorrSidecarIdsDto { Ids = _sidecarIndex.Snapshot() });
     }
 
     /// <summary>

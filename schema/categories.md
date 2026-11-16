@@ -20,6 +20,7 @@ This plugin owns the list (`Jellyfin.Plugin.CorrMedia/Models/EditCategoryCatalog
 |----|-----------------|
 | `word_arse` | *rse |
 | `word_ass` | *ss |
+| `word_asshole` | *ssh*le |
 | `word_bastard` | b*st*rd |
 | `word_bitch` | b*tch |
 | `word_bloody` | bl**dy |
@@ -31,10 +32,19 @@ This plugin owns the list (`Jellyfin.Plugin.CorrMedia/Models/EditCategoryCatalog
 | `word_fu` | F.U. |
 | `word_goddamn` | g*dd*mn |
 | `word_hell` | h*ll |
+| `word_jackass` | j*ck*ss |
 | `word_piss` | p*ss |
 | `word_prick` | pr*ck |
 | `word_screw` | scr*w |
 | `word_shit` | sh*t |
+
+### Crude Anatomy (`crude_anatomy`)
+
+One leaf for every spoken crude anatomy reference. An idiom such as "he's got balls" is `vulgar_expression`.
+
+### Vulgar Expression (`vulgar_expression`)
+
+Idiomatic vulgarity. One leaf, not a word list.
 
 ### Blasphemy (`blasphemy`)
 
@@ -42,6 +52,7 @@ This plugin owns the list (`Jellyfin.Plugin.CorrMedia/Models/EditCategoryCatalog
 |----|-----------------|
 | `word_goddamn` | g*dd*mn (same id as under Profanity) |
 | `word_god_derogatory` | God (derogatory) |
+| `word_lord_derogatory` | Lord (derogatory) |
 | `word_jesus_derogatory` | Jesus (derogatory) |
 | `word_christ_derogatory` | Christ (derogatory) |
 
@@ -70,6 +81,7 @@ This plugin owns the list (`Jellyfin.Plugin.CorrMedia/Models/EditCategoryCatalog
 | `word_geez` | geez |
 | `word_gosh` | gosh |
 | `word_idiot` | idiot |
+| `word_moron` | moron |
 | `word_omg` | OMG |
 | `word_poop` | poop |
 | `word_shut_up` | shut up |
@@ -113,6 +125,7 @@ This plugin owns the list (`Jellyfin.Plugin.CorrMedia/Models/EditCategoryCatalog
 | `sexually_suggestive` | Sexually Suggestive |
 | `sexual_reference` | Sexual Reference (hear; same node as under Language) |
 | `vulgar_gestures` | Vulgar Gestures |
+| `vulgar_humor` | Vulgar Humor |
 
 ## Nudity & Immodesty (`nudity_immodesty`) — see
 
@@ -196,8 +209,13 @@ These sidecar strings are accepted and rewritten. Prefer the canonical ids above
 | `kiss`, `kissing` | `kissing_heterosexual_normal` |
 | `drugs`, `alcohol` | `drugs_illegal` |
 | `credits` | `opening_credits` |
+| `ass_hole`, `arsehole` | `word_asshole` |
 | `fuck`, `f_word`, `fword` | `word_fuck` |
 | `n_word`, `nword` | `word_n_word` |
+| `balls`, `ball_sack`, `ballsack`, `word_balls`, `word_ball_sack` | `crude_anatomy` |
+| `tits`, `tit`, `word_tits` | `crude_anatomy` |
+| `orgasm`, `orgasmic`, `word_orgasm` | `crude_anatomy` |
+| `lord` | `word_lord_derogatory` |
 | `test` | `other` |
 
 A token that already matches a tree id is used as-is. A bare word that matches a `word_*` leaf (`ass` → `word_ass`) is accepted. Spaces, slashes, hyphens, `&`, and `*` are normalized to `_`.
